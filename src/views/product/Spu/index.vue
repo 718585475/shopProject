@@ -2,7 +2,7 @@
   <div>
     <!-- //三级联动 -->
     <el-card style="margin: 20px 0">
-      <CategorySelect @getCategoryId="getCategoryId" :show="!show">
+      <CategorySelect @getCategoryId="getCategoryId" :show="scene != 0">
       </CategorySelect>
     </el-card>
 
@@ -55,7 +55,7 @@
         @current-change="handleCurrentChange" -->
         <el-pagination
           @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+          @current-change="getSpuList"
           style="text-align: center"
           :current-page="page"
           :page-sizes="[3, 5, 10]"
@@ -69,7 +69,7 @@
       <!-- 第二种形态：点击添加spu按钮和修改按钮后的形态 -->
       <div v-show="scene == 1">
 
-        <spuForm></spuForm>
+        <spuForm @changeScene="changeScene" ref="spu"></spuForm>
 
       </div>
       <!-- 第三种形态：添加sku -->
@@ -102,7 +102,7 @@ export default {
       records: [],
 
       //0,1,2表示显示三种形态哪一种
-      scene: 1,
+      scene: 0,
     };
   },
 
@@ -112,7 +112,8 @@ export default {
   },
 
   methods: {
-    async getSpuList() {
+    async getSpuList(pages =1) {
+      this.page = pages
       const { page, limit, category3Id } = this;
 
       let result = await this.$API.spu.reqSpuList(page, limit, category3Id);
@@ -154,11 +155,35 @@ export default {
         this.scene = 1
 
 
+        this.$refs.spu.addSpuData(this.category3Id)
+
     },
 
     //修改spu小按钮
     updateSpu(row){
         this.scene = 1
+
+        this.$refs.spu.initSpuData(row)
+        
+
+
+    },
+
+
+    //spuForm取消按钮
+    changeScene({scene,flag}){
+      this.scene = scene
+
+      if(flag=="修改"){
+        //如果为修改 停在当前页
+        this.getSpuList(this.page)
+
+      }else{
+        
+
+        this.getSpuList()
+      }
+
 
     }
 
