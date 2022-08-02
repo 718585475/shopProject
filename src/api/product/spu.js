@@ -60,6 +60,10 @@ export const reqSpuImageList = (spuId)=>{
 
 }
 
+
+
+
+
 //GET /admin/product/baseSaleAttrList 获取平台全部销售属性  一共三个
 
 export const reqBaseSaleAttrList = ()=>{
@@ -104,5 +108,93 @@ export const reqAddOrUpdateSpu =(spuInfo)=>{
 
 
     }
+
+}
+
+//DELETE /admin/product/deleteSpu/{spuId}
+export const reqDeleteSpu =(spuId)=>{
+
+    return request({
+
+        url:`/admin/product/deleteSpu/${spuId}`,
+        method:'delete'
+
+
+    })
+
+
+}
+
+
+
+
+
+// 获取销售属性 GET /admin/product/spuSaleAttrList/{spuId}
+
+export const reqSpuSaleAttrList =(spuId)=>{
+
+    return request({
+
+        url:`/admin/product/spuSaleAttrList/${spuId}`,
+        method:'get'
+
+
+
+    })
+
+
+}
+
+
+//获取平台商品基础属性  GET /admin/product/attrInfoList/{category1Id}/{category2Id}/{category3Id}
+
+export const reqAttrInfoList = (category1Id,category2Id,category3Id)=>{
+
+    return request({
+
+        url:`/admin/product/attrInfoList/${category1Id}/${category2Id}/${category3Id}`,
+        method:'get'
+
+
+
+    })
+
+
+}
+
+
+
+// POST /admin/product/saveSkuInfo  添加sku
+
+export const reqAddSku = (skuInfo)=>{
+
+    return request({
+
+        url:'/admin/product/saveSkuInfo',
+        method:'post',
+        data:skuInfo
+
+
+    })
+
+
+
+}
+
+
+//GET /admin/product/findBySpuId/{spuId}  获取spu的sku列表数据的接口
+
+
+export const repSkuList = (spuId)=>{
+
+    return request({
+
+        url:`/admin/product/findBySpuId/${spuId}`,
+        method:'get'
+
+
+
+    })
+
 
 }
