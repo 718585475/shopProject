@@ -1,6 +1,10 @@
 <template>
   <div>
     <Card></Card>
+
+    <Sale></Sale>
+
+
   </div>
 </template>
 
@@ -8,7 +12,7 @@
 import { mapGetters } from 'vuex'
 
 import Card from './Card'
-
+import Sale from './Sale'
 
 export default {
   name: 'Dashboard',
@@ -19,6 +23,7 @@ export default {
   },
   components:{
     Card,
+    Sale
     
 }
 

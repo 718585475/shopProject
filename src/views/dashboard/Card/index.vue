@@ -35,16 +35,35 @@
 
       </Detail></el-card></el-col>
 
-      <el-col :span="6"><el-card><Detail count="3123123" title="支付笔数">
+
+
+
+      <el-col :span="6"><el-card>
+        <Detail count="3123123" title="支付笔数">
+            <template slot="charts">
+                <barChart></barChart>
+
+            </template>
+
+
 
             <template slot="footer">
                 <span>转化率:64%</span>
                 
             </template>
 
-      </Detail></el-card></el-col>
+        </Detail>
+      </el-card>
+      </el-col>
+
 
       <el-col :span="6"><el-card><Detail count="78%" title="运营活动效果">
+            <template slot="charts">
+
+                <progressCharts></progressCharts>
+
+            </template>
+
 
             <template slot="footer">
                 <span>周同比 &nbsp;&nbsp; 34.8% ↑</span>&nbsp;&nbsp;
@@ -61,6 +80,8 @@
 <script>
 import Detail from "./Detail";
 import LineChart from './LineChart'
+import barChart from './barChart'
+import progressCharts from './progressCharts'
 
 
 export default {
@@ -75,7 +96,9 @@ export default {
   mounted() {},
   components: {
     Detail,
-    LineChart
+    LineChart,
+    barChart,
+    progressCharts
   },
 };
 </script>
