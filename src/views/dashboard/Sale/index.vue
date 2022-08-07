@@ -17,7 +17,7 @@
           <span @click="setYear">本年</span>
 
           <el-date-picker
-           v-model="date"
+            v-model="date"
             type="daterange"
             range-separator="-"
             start-placeholder="开始日期"
@@ -37,43 +37,37 @@
 
           <el-col :span="6">
             <div class="count">
-                <h3>{{title}}排名</h3>
+              <h3>{{ title }}排名</h3>
 
-                <ul>
-                    <li>
-                        <span class="index">1</span>
-                        <span>KFC</span>
-                        <span class="value">234234</span>
-
-                    </li>
-                    <li>
-                        <span class="index">2</span>
-                        <span>KFC</span>
-                        <span class="value">324</span>
-
-                    </li>
-                                        <li>
-                        <span class="index">3</span>
-                        <span>KFC</span>
-                        <span class="value">23423</span>
-
-                    </li>
-                                        <li>
-                        <span class="index">4</span>
-                        <span>KFC</span>
-                        <span class="value">23445</span>
-
-                    </li>
-                                        <li>
-                        <span class="index">1</span>
-                        <span>KFC</span>
-                        <span class="value">5445</span>
-
-                    </li>
-                </ul>
-
+              <ul>
+                <li>
+                  <span class="index">1</span>
+                  <span>KFC</span>
+                  <span class="value">234234</span>
+                </li>
+                <li>
+                  <span class="index">2</span>
+                  <span>KFC</span>
+                  <span class="value">324</span>
+                </li>
+                <li>
+                  <span class="index">3</span>
+                  <span>KFC</span>
+                  <span class="value">23423</span>
+                </li>
+                <li>
+                  <span class="index">4</span>
+                  <span>KFC</span>
+                  <span class="value">23445</span>
+                </li>
+                <li>
+                  <span class="index">1</span>
+                  <span>KFC</span>
+                  <span class="value">5445</span>
+                </li>
+              </ul>
             </div>
-            </el-col>
+          </el-col>
         </el-row>
       </div>
     </el-card>
@@ -82,87 +76,66 @@
 
 <script>
 import * as echarts from "echarts";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
+import { mapState } from "vuex";
 
 export default {
   data() {
     return {
       activeName: "sale",
 
-      myCharts:null,
+      myCharts: null,
 
-      date:[]
-
+      date: [],
     };
   },
   methods: {
-
-    setDay(){
-
-        let day = dayjs().format('YYYY-MM-DD')
-        this.date = [day,day]
-
+    setDay() {
+      let day = dayjs().format("YYYY-MM-DD");
+      this.date = [day, day];
     },
 
-
-    setWeek(){
-        let start = dayjs().day(1).format('YYYY-MM-DD')
-        let end = dayjs().day(7).format('YYYY-MM-DD')
-        this.date = [start,end]
-
+    setWeek() {
+      let start = dayjs().day(1).format("YYYY-MM-DD");
+      let end = dayjs().day(7).format("YYYY-MM-DD");
+      this.date = [start, end];
     },
 
-    setMonth(){
-        let start = dayjs().startOf('month').format('YYYY-MM-DD')
-        let end = dayjs().endOf('month').format('YYYY-MM-DD')
-        this.date = [start,end]
-
+    setMonth() {
+      let start = dayjs().startOf("month").format("YYYY-MM-DD");
+      let end = dayjs().endOf("month").format("YYYY-MM-DD");
+      this.date = [start, end];
     },
 
-    setYear(){
-        let start = dayjs().startOf('year').format('YYYY-MM-DD')
-        let end = dayjs().endOf('year').format('YYYY-MM-DD')
-        this.date = [start,end]
-    }
-
-
-
+    setYear() {
+      let start = dayjs().startOf("year").format("YYYY-MM-DD");
+      let end = dayjs().endOf("year").format("YYYY-MM-DD");
+      this.date = [start, end];
+    },
   },
   //生命周期 - 创建完成
   created() {},
 
-  computed:{
+  computed: {
+    title() {
+      return this.activeName == "sale" ? "销售额" : "访问量";
+    },
 
-    title(){
-
-        return this.activeName =='sale'?'销售额':'访问量'
-    }
-
-
+    ...mapState({
+      listState: (state) => state.home.list,
+    }),
   },
 
-    watch:{
-        title(){
-
-            this.myCharts.setOption({
-                title:{
-                    text:this.title
-                }
-            })
-
-
-        }
-    },
 
 
   //DOM挂载完毕
   mounted() {
-     this.myCharts = echarts.init(this.$refs.charts);
+    this.myCharts = echarts.init(this.$refs.charts);
 
     this.myCharts.setOption({
-        title:{
-            text:this.title+'趋势'
-        },
+      title: {
+        text: this.title + "趋势",
+      },
 
       tooltip: {
         trigger: "axis",
@@ -179,7 +152,7 @@ export default {
       xAxis: [
         {
           type: "category",
-          data: ["1", "2", "3", "4", "5", "6", "7","8","9","10","11","12"],
+          data: [],
           axisTick: {
             alignWithLabel: true,
           },
@@ -195,18 +168,87 @@ export default {
           name: "Direct",
           type: "bar",
           barWidth: "60%",
-          data: [10, 52, 200, 334, 390, 330, 220,324,34,545,78,65],
+          data: [],
         },
       ],
     });
   },
+
+    watch: {
+    title() {
+      this.myCharts.setOption({
+        title: {
+          text: this.title,
+        },
+        xAxis: {
+          data:
+            this.title == "销售额"
+              ? this.listState.orderFullYearAxis
+              : this.listState.userFullYearAxis,
+        },
+        series: [
+          {
+            name: "Direct",
+            type: "bar",
+            barWidth: "60%",
+            data:
+              this.title == "销售额"
+                ? this.listState.orderFullYear
+                : this.listState.userFullYear,
+          },
+        ],
+      });
+    },
+
+    listState() {
+      this.myCharts.setOption({
+        title: {
+          text: this.title + "趋势",
+        },
+
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        xAxis: [
+          {
+            type: "category",
+            data: this.listState.orderFullYearAxis,
+            axisTick: {
+              alignWithLabel: true,
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+          },
+        ],
+        series: [
+          {
+            name: "Direct",
+            type: "bar",
+            barWidth: "60%",
+            data: this.listState.orderFullYear,
+          },
+        ],
+      });
+    },
+  },
+
+
 };
 </script>
 
 <style>
-
-
-
 .el-card__header {
   border-bottom: none;
 }
@@ -223,10 +265,8 @@ export default {
   margin-right: 10px;
 }
 
-.count ul li .value{
-float: right;
-
-
+.count ul li .value {
+  float: right;
 }
 
 .charts {
@@ -234,45 +274,33 @@ float: right;
   height: 300px;
 }
 
-.count ul{
-    width: 100%;
-    height: 300px;
-    list-style: none;
-    padding: 0;
-
+.count ul {
+  width: 100%;
+  height: 300px;
+  list-style: none;
+  padding: 0;
 }
-.count ul li{
-
-margin-top: 5px;
-height: 10%;
-
+.count ul li {
+  margin-top: 5px;
+  height: 10%;
 }
 
-.count ul li span{
-
-    float: left;
-    margin-right:20px;
-
-
+.count ul li span {
+  float: left;
+  margin-right: 20px;
 }
 
-.index{
-float: left;
-width: 20px;
-height: 20px;
-border-radius: 50%;
-background-color: black;
-color: white;
-text-align: center;
-
-
+.index {
+  float: left;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: black;
+  color: white;
+  text-align: center;
 }
 
-.right span:hover{
-
-    color: blue;
-
+.right span:hover {
+  color: blue;
 }
-
-
 </style>

@@ -16,6 +16,10 @@ import Sale from './Sale'
 
 export default {
   name: 'Dashboard',
+  mounted(){
+    this.$store.dispatch('getData')
+  },
+
   computed: {
     ...mapGetters([
       'name'

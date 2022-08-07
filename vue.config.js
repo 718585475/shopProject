@@ -1,4 +1,5 @@
 'use strict'
+const { mock } = require('mockjs')
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
 
@@ -43,6 +44,13 @@ module.exports = {
         pathRewrite: { '^/dev-api': '' },
       },
     },
+
+    //开启mock数据
+    after:require('./mock/mock-server.js')
+
+    
+
+
 
   },
   configureWebpack: {
