@@ -30,6 +30,7 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+//常规路由 对所有角色都展示的
 export const constantRoutes = [
 
   {
@@ -58,53 +59,118 @@ export const constantRoutes = [
 
 
 
-  {
-    path:'/product',
-    component:Layout,
-    name:'Product',
-    meta:{title:'商品管理',icon:'el-icon-goods'},
-    children:[
-      {
-        path:'trademark',
-        name:"TradeMark",
-        component:()=>import('@/views/product/tradeMark'),
-        meta:{title:'品牌管理'}
-      },
-
-      {
-        path:'attr',
-        name:"Attr",
-        component:()=>import('@/views/product/Attr'),
-        meta:{title:'商品属性管理'}
-      },
-
-
-      {
-        path:'spu',
-        name:"Spu",
-        component:()=>import('@/views/product/Spu'),
-        meta:{title:'spu管理'}
-      },
-
-
-      {
-        path:'sku',
-        name:"Sku",
-        component:()=>import('@/views/product/Sku'),
-        meta:{title:'sku管理'}
-      },
-
-
-    ]
-  },
 
 
 
 
 
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+
+
 ]
+
+//异步路由 只对部分角色展示
+export const asyncRoutes = [
+
+    //商品管理
+    {
+      path:'/product',
+      component:Layout,
+      name:'Product',
+      meta:{title:'商品管理',icon:'el-icon-goods'},
+      children:[
+        {
+          path:'trademark',
+          name:"TradeMark",
+          component:()=>import('@/views/product/tradeMark'),
+          meta:{title:'品牌管理'}
+        },
+  
+        {
+          path:'attr',
+          name:"Attr",
+          component:()=>import('@/views/product/Attr'),
+          meta:{title:'商品属性管理'}
+        },
+  
+  
+        {
+          path:'spu',
+          name:"Spu",
+          component:()=>import('@/views/product/Spu'),
+          meta:{title:'spu管理'}
+        },
+  
+  
+        {
+          path:'sku',
+          name:"Sku",
+          component:()=>import('@/views/product/Sku'),
+          meta:{title:'sku管理'}
+        },
+  
+  
+      ]
+    },
+  
+    //权限管理
+    {
+      name: 'Acl',
+      path: '/acl',
+      component: Layout,
+      redirect: '/acl/user/list',
+      meta: {
+        title: '权限管理',
+        icon: 'el-icon-lock'
+      },
+      children: [
+        {
+          name: 'User',
+          path: 'user/list',
+          component: () => import('@/views/acl/user/list'),
+          meta: {
+            title: '用户管理',
+          },
+        },
+        {
+          name: 'Role',
+          path: 'role/list',
+          component: () => import('@/views/acl/role/list'),
+          meta: {
+            title: '角色管理',
+          },
+        },
+        {
+          name: 'RoleAuth',
+          path: 'role/auth/:id',
+          component: () => import('@/views/acl/role/roleAuth'),
+          meta: {
+            activeMenu: '/acl/role/list',
+            title: '角色授权',
+          },
+          hidden: true,
+        },
+        {
+          name: 'Permission',
+          path: 'permission/list',
+          component: () => import('@/views/acl/permission/list'),
+          meta: {
+            title: '菜单管理',
+          },
+        },
+      ]
+    },
+
+
+]
+
+//任意路由  路径出现错误时冲顶先404
+export const anyRoutes = [
+
+    // 404 page must be placed at the end !!!
+    { path: '*', redirect: '/404', hidden: true }
+
+]
+
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
